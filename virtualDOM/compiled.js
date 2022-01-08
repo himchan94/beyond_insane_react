@@ -75,7 +75,6 @@ function createElement(node) {
   const el = document.createElement(node.type);
   setProps(el, node.props);
   node.children.map(createElement).forEach(el.appendChild.bind(el));
-  //@
   return el;
 }
 
@@ -135,7 +134,7 @@ function patch(parent, patches, index = 0) {
       return parent.replaceChild(newEl, el);
     }
     case UPDATE: {
-      const { children } = patches;
+      const { children, props } = patches;
       patchProps(el, props);
       for (let i = 0; i < children.length; i++) {
         patch(el, children[i], i);
@@ -165,12 +164,10 @@ function view(count) {
   // );
 
   const r = [...Array(count).keys()];
-  return (
-    <ul id='cool' className={`my-class-${count % 3}`}>
-      {r.map((n) => (
-        <li>item {(count * n).toString()}</li>
-      ))}
-    </ul>
+  return h(
+    "ul",
+    { id: "cool", className: `my-class-${count % 3}` },
+    r.map((n) => h("li", null, "item ", (count * n).toString()))
   );
 }
 
